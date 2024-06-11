@@ -1,7 +1,7 @@
 package services.impl;
 
 import models.Pants;
-import repositories.PantsRepository;
+import repositories.impl.PantsRepository;
 import services.IPantsService;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class PantsService implements IPantsService {
 
     @Override
     public void removeProduct(Pants pants) {
-        pantsRepository.removePants(pants);
+        pantsRepository.remove(pants);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PantsService implements IPantsService {
                 } if(newPants.getQuantity() != -1){
                     oldPants.setQuantity(newPants.getQuantity());
                 }
-                pantsRepository.updatePantsToRepo(oldPants);
+                pantsRepository.update(oldPants);
                 return true;
             }
         }

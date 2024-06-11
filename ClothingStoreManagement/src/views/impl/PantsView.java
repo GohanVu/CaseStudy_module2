@@ -1,14 +1,13 @@
-package views;
+package views.impl;
 
 import models.Pants;
-import models.Shirt;
 import services.IPantsService;
-import services.impl.PantsService;
+import views.IPantsView;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class PantsView {
+public class PantsView implements IPantsView {
     public int view (){
         System.out.println("=========================================");
         System.out.println("||             Pants View              ||");
@@ -18,7 +17,7 @@ public class PantsView {
         System.out.println("||          3. Delete product          ||");
         System.out.println("||          4. Show all                ||");
         System.out.println("||          5. Search product          ||");
-        System.out.println("||          0. Exit                    ||");
+        System.out.println("||          0. Back to product view    ||");
         System.out.println("=========================================");
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -84,6 +83,7 @@ public class PantsView {
         Pants pants = new Pants(code,name,price,quantity);
         return pants;
     }
+    @Override
     public void viewMessage(boolean result){
         if(result){
             System.out.println("Successful");
@@ -91,36 +91,40 @@ public class PantsView {
             System.out.println("Failure");
         }
     }
+    @Override
     public void searchResultByName(List<Pants> pants , String userType){
         System.out.println("=============================================================");
         System.out.println("                 RESULT for '"+userType+"'");
         System.out.println("=============================================================");
         printHeader();
         for (Pants pants1 : pants){
-            System.out.println(infoShirt(pants1));
+            System.out.println(infoProduct(pants1));
         }
         System.out.println("==============================================================");
     }
+    @Override
     public void searchResultByCode(List<Pants> pants , int userType){
         System.out.println("=============================================================");
         System.out.println("                 RESULT for '"+userType+"'");
         System.out.println("=============================================================");
         printHeader();
         for (Pants pants1 : pants){
-            System.out.println(infoShirt(pants1));
+            System.out.println(infoProduct(pants1));
         }
         System.out.println("==============================================================");
     }
-    private String infoShirt(Pants pants1) {
+    private String infoProduct(Pants pants1) {
         return String.format("| %-5d | %-25s | %-10.2f | %-8d |",
                 pants1.getCode(),
                 pants1.getName(),
                 pants1.getPrice(),
                 pants1.getQuantity());
     }
-    private void printHeader() {
+    @Override
+    public void printHeader() {
         System.out.println(String.format("| %-5s | %-25s | %-10s | %-3s |", "CODE", "NAME", "PRICE", "QUANTITY"));
     }
+    @Override
     public boolean confirmDelete(Pants pants){
         System.out.println("Do you want delete the product with code "+pants.getCode()+": "+pants.getName());
         System.out.println("Press Y to confirm, N to cancel");
@@ -135,10 +139,12 @@ public class PantsView {
             return  confirmDelete(pants);
         }
     }
+    @Override
     public String inputName(){
         System.out.println("Enter name: ");
         return new Scanner(System.in).nextLine();
     }
+    @Override
     public Pants viewEdit (Pants oldPants){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter new pants name (press Enter to keep old name-'"+oldPants.getName()+"'-): ");
@@ -169,6 +175,7 @@ public class PantsView {
         }
         return new Pants(oldPants.getCode(),name,price,quantity);
     }
+    @Override
     public int viewSearch(){
         System.out.println("--------------Search Product--------------");
         System.out.println("1.Search by name");
@@ -190,20 +197,20 @@ public class PantsView {
         } while (choice<0 || choice > 2);
         return choice;
     }
-
+    @Override
     public int inputCode() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your code: ");
         return Integer.parseInt(scanner.nextLine());
     }
-
-    public void displayAllPants(List<Pants> pants1) {
+    @Override
+    public void displayAllItems(List<Pants> pants1) {
         System.out.println("=============================================================");
         System.out.println("||                    Shirt list                           ||");
         System.out.println("=============================================================");
         printHeader();
         for (Pants pants : pants1){
-            System.out.println(infoShirt(pants));
+            System.out.println(infoProduct(pants));
         }
         System.out.println("==============================================================");
     }

@@ -1,13 +1,14 @@
-package repositories;
+package repositories.impl;
 
 import models.Pants;
+import repositories.IPantsRepositories;
 
 import java.io.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PantsRepository {
+public class PantsRepository  implements IPantsRepositories {
     private static final String SRC_PANTS = "D:\\Codegym\\module2\\CaseStudy_module2\\ClothingStoreManagement\\src\\data\\pants.csv";
     private static List<Pants> pants = new LinkedList<>();
     static {
@@ -15,8 +16,6 @@ public class PantsRepository {
         if(!file.exists()){
             try {
                 file.createNewFile();
-                Pants pants1 = new Pants(01,"Skinny Jeans",300000,17);
-                writeFile(Collections.singletonList(pants1),false);
             } catch (Exception e){
                 System.out.println("Error creating new file");
             }
@@ -54,12 +53,13 @@ public class PantsRepository {
     private static String toString (Pants pants){
         return pants.getCode()+","+pants.getName()+","+pants.getPrice()+","+pants.getQuantity();
     }
+    @Override
     public void add (Pants pants){
         List<Pants> pants1 = getAll();
         pants1.add(pants);
         writeFile(Collections.singletonList(pants),true);
     }
-
+    @Override
     public List<Pants> getAll() {
         List<Pants> pants1 = new LinkedList<>();
         File file = new File(SRC_PANTS);
@@ -89,6 +89,7 @@ public class PantsRepository {
         }
         return pants1;
     }
+    @Override
     public  Pants findByCode(int code){
         List<Pants> pants1 = getAll();
         for (Pants pants2 : pants1){
@@ -101,7 +102,8 @@ public class PantsRepository {
         }
         return null;
     }
-    public void removePants (Pants pants){
+    @Override
+    public void remove(Pants pants){
         List<Pants> pants1 = getAll();
         int size = pants1.size();
         for (int i = 0; i < size; i++) {
@@ -113,7 +115,8 @@ public class PantsRepository {
         }
         writeFile(pants1,false);
     }
-    public void updatePantsToRepo(Pants updatePants){
+    @Override
+    public void update(Pants updatePants){
         List<Pants> pants1 = getAll();
         for (int i = 0; i < pants1.size(); i++) {
             if(pants1.get(i).getCode() == updatePants.getCode()){

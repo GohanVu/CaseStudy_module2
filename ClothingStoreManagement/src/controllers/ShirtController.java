@@ -1,100 +1,84 @@
 package controllers;
 
-import models.Pants;
-import services.IPantsService;
-import services.impl.PantsService;
-import views.PantsView;
+import models.Shirt;
+import services.IShirtService;
+import services.impl.ShirtService;
+import views.impl.ShirtView;
 
-import java.io.File;
 import java.util.List;
 
 public class ShirtController {
-    public static void main(String[] args) {
-        PantsView pantsView = new PantsView();
-        IPantsService pantsService = new PantsService() ;
-        int choice ;
-        int code;
-        Pants pants;
-        boolean result;
-        List<Pants> pants1;
+    ShirtView shirtView = new ShirtView();
+    IShirtService shirtService = new ShirtService();
+    ProductController productController = new ProductController();
+    int choice;
+    int code;
+    Shirt shirt;
+    boolean result;
+    List<Shirt> shirts;
+    public void  run(){
         while (true){
-            choice = pantsView.view();
+            choice = shirtView.view();
             switch (choice){
-                case 1: {
-
-                    try {
-                        pants = pantsView.viewAdd(pantsService);
-                        result = pantsService.add(pants);
-                        pantsView.viewMessage(result);
-                        break;
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-                case 2: {
-                    code = pantsView.inputCode();
-                    Pants existsPants = pantsService.findByCode(code);
-                    if (existsPants == null){
-                        pantsView.viewMessage(false);
+                case 1:
+                    shirt = shirtView.viewAdd(shirtService);
+                    result = shirtService.add(shirt);
+                    shirtView.viewMessage(result);
+                    break;
+                case 2:
+                    code = shirtView.inputCode();
+                    Shirt existShirt = shirtService.findByCode(code);
+                    if (existShirt == null){
+                        shirtView.viewMessage(false);
                     } else {
-                        Pants newPants = pantsView.viewEdit(existsPants);
-                        result = pantsService.update(newPants);
-                        pantsView.viewMessage(result);
+                        Shirt newShirt = shirtView.viewEdit(existShirt);
+                        result = shirtService.update(newShirt);
+                        shirtView.viewMessage(result);
                     }
-                }
-                break;
-                case 3:{
-                    code = pantsView.inputCode();
-                    pants = pantsService.findByCode(code);
-                    if(pants == null){
-                        pantsView.viewMessage(false);
+                    break;
+                case 3:
+                    code = shirtView.inputCode();
+                    shirt = shirtService.findByCode(code);
+                    if(shirt == null){
+                        shirtView.viewMessage(false);
                     } else {
-                        boolean isConfirm = pantsView.confirmDelete(pants);
-                        if(isConfirm){
-                            pantsService.removeProduct(pants);
-                            pantsView.viewMessage(true);
-                        }
+                        shirtService.removeProduct(shirt);
+                        shirtView.viewMessage(true);
                     }
-                }
-                break;
-                case 4:{
-                    pants1 = pantsService.getAll();
-                    pantsView.displayAllPants(pants1);
-                }
-                break;
-                case 5:{
-                    int searchChoice = pantsView.viewSearch();
+                    break;
+                case 4:
+                    shirts = shirtService.getAll();
+                    shirtView.displayAllItems(shirts);
+                case 5:
+                    int searchChoice = shirtView.viewSearch();
                     switch (searchChoice){
-                        case 1:{
-                            String name = pantsView.inputName();
-                            pants1 = pantsService.searchByName(name);
-                            if(pants1 == null){
-                                System.out.println("Not found your search: "+name+"'");
+                        case 1:
+                            String name  = shirtView.inputName();
+                            shirts = shirtService.searchByName(name);
+                            if(shirts == null){
+                                System.out.println("Not found your search:'"+name+"'");
                             } else {
-                                System.out.println("Your search:'"+name+"'");
-                                pantsView.searchResultByName(pants1,name);
+                                System.out.println("Your search: '"+name+"'");
+                                shirtView.searchResultByName(shirts,name);
                             }
-                        }
-                        break;
-                        case 2: {
-                            code = pantsView.inputCode();
-                            pants1 = pantsService.searchByCode(code);
-                            if(pants1 == null){
-                                System.out.println("Invalid code:'"+code+"'");
+                            break;
+                        case 2:
+                            code = shirtView.inputCode();
+                            shirts = shirtService.searchByCode(code);
+                            if(shirts == null){
+                                System.out.println("Invalid code: '"+code+"'");
                             } else {
-                                System.out.println("Your search:'"+code+"'");
-                                pantsView.searchResultByCode(pants1,code);
+                                System.out.println("Your search: '"+code+"'");
+                                shirtView.searchResultByCode(shirts,code);
                             }
-                        }
-                        break;
+                            break;
                     }
-                }
-                break;
+                    break;
                 case 0:
-                    return;
+                    productController.run();
+                    return ;
             }
-            System.out.println();
         }
     }
+
 }
